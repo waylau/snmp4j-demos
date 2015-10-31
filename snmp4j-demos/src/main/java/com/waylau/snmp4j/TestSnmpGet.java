@@ -18,7 +18,7 @@ public class TestSnmpGet {
 @Test
 public void testGet()
 {
-String ip = "127.0.0.1";
+String ip = "192.168.11.103";
 String community = "public";
 // String oidval = "1.3.6.1.2.1.1.6.0";
 String oidval = "1.3.6.1.2.1.1.1.0";
