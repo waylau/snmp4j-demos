@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<!-- 定义下面的引用名 -->
+	<Properties>
+		<property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n</property>
+		<property name="file_name">logs/app.log</property>
+		<property name="rolling_file_name">logs/app-%d{yyyy-MM-dd}-%i.log.gz</property>
+
+		<property name="every_file_size">10M</property><!-- 日志切割的最小单位 -->
+		<property name="output_log_level">debug</property><!-- 日志输出级别 -->
+	</Properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+			<ThresholdFilter level="trace" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<!--这个都知道是输出日志的格式 -->
+			<PatternLayout pattern="${log_pattern}" />
+		</Console>
+		<!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
+		<!-- 按月生成归档日志，可以使用 filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz" -->
+		<RollingFile name="RollingFile" fileName="${file_name}"
+			filePattern="${rolling_file_name}">
+			<PatternLayout pattern="${log_pattern}" />
+			<SizeBasedTriggeringPolicy size="${every_file_size}" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<!--建立一个默认的root的logger，需要在root的level中指定输出的级别 -->
+		<Root level="${output_log_level}">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+	</Loggers>
+</Configuration>
